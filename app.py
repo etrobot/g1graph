@@ -6,7 +6,7 @@ import time
 def main():
     st.set_page_config(page_title="g1 prototype", page_icon="🧠", layout="wide")
     
-    st.title("o1graph: Using Langgraph to create o1-like reasoning chains")
+    st.title("g1graph: Using Langgraph to create o1-like reasoning chains")
     
     st.markdown("""
     This is an early prototype of using prompting to create o1-like reasoning chains to improve LLM output accuracy. It is not perfect and accuracy has yet to be formally evaluated.

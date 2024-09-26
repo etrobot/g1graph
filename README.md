@@ -1,4 +1,4 @@
-# o1graph
+# g1graph
 Using LangGraph to create o1-like reasoning chains.
 
 This is an early prototype of using prompting to create o1-like reasoning chains to improve LLM output accuracy. It is not perfect and accuracy has yet to be formally evaluated.

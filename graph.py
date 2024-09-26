@@ -6,7 +6,8 @@ import json
 import os
 import time
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
+
 
 load_dotenv()
 
@@ -25,20 +26,11 @@ class ResponseFormat(BaseModel):
     next_action: str = Field(..., description="Next action to take after this step")
 
 
-llm = ChatOpenAI(
-    model=os.getenv("MODEL", "gpt-4o-mini"),
-    api_key=os.getenv("OPENAI_KEY"),
-    base_url=os.getenv("BASE_URL", "https://api.openai.com/v1"),
+llm = ChatGroq(
+    model=os.getenv("MODEL", "llama3-8b-8192"),
+    api_key=os.getenv("GROQ_API_KEY"),
 ).with_structured_output(ResponseFormat)
 
-# If your model provider doesn't support structured output, you can use the following code:
-# llm = ChatOpenAI(
-#     model=os.getenv("MODEL", "gpt-4o-mini"),
-#     api_key=os.getenv("OPENAI_KEY"),
-#     base_url=os.getenv("BASE_URL", "https://api.openai.com/v1"),
-# ).bind(
-#     response_format={"type": "json_object"}
-# )
 
 def make_api_call(message, max_tokens, is_final_answer=False):
     messages = [
@@ -71,17 +63,13 @@ USE BEST PRACTICES.
                     input=messages,
                     temperature=0.4,
                 )
-                # If your model provider doesn't support structured output, you can use the following code:
-                # return json.loads(response.content)
-                return response.model_dump()
+                return response.content
             else:
                 response = llm.invoke(
                     input=messages,
                     max_tokens=max_tokens,
                     temperature=0.8,
                 )
-                # If your model provider doesn't support structured output, you can use the following code:
-                # return json.loads(response.content)
                 return response.model_dump()
         except Exception as e:
             if attempt == 2:
